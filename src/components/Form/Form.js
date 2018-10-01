@@ -2,21 +2,23 @@ import React, { Component } from 'react'
 import ImageBond from './assets/bond_approve.jpg'
 import './Form.css'
 
+class InitParamForm {
+    constructor() {
+        this.firstName = '';
+        this.lastName = '';
+        this.password = '';
+    }
+}
+
 class Form extends Component {
     state = {
-        firstName: '',
-        lastName: '',
-        password: '',
-        isValid: false,
-        errors: {
-            firstName: '',
-            lastName: '',
-            password: ''
-        }
+        ...new InitParamForm(), 
+        errors: new InitParamForm(),
+        isValid: false
     }
 
-    handleChange = (field, event) => {
-        this.setState({[field]: event.target.value, errors: this.clearError()});
+    handleChange = field => event => {
+        this.setState({[field]: event.target.value, errors: new InitParamForm()});
     }
 
     handleSubmit = event => {
@@ -66,16 +68,6 @@ class Form extends Component {
         }
     }
 
-    clearError = () => {
-        let errors = {...this.state.errors};
-
-        for(let key in errors) {
-            errors[key] = '';
-        }
-
-        return errors
-    }
-
     renderForm = () => {
         const {firstName, lastName, password, errors} = this.state;
 
@@ -92,7 +84,7 @@ class Form extends Component {
                         type='text'
                         className={'field__input field-input t-input-firstname'} 
                         value={firstName}
-                        onChange={e => this.handleChange('firstName', e)}
+                        onChange={this.handleChange('firstName')}
                     />
                     <span className={'field__error field-error t-error-firstname'}>
                         {errors.firstName}
@@ -108,7 +100,7 @@ class Form extends Component {
                         type='text'
                         className={'field__input field-input t-input-lastname'} 
                         value={lastName}
-                        onChange={e => this.handleChange('lastName', e)}
+                        onChange={this.handleChange('lastName')}
                     />
                     <span className={'field__error field-error t-error-lastname'}>
                         {errors.lastName}
@@ -124,7 +116,7 @@ class Form extends Component {
                         type='password'
                         className={'field__input field-input t-input-password'} 
                         value={password}
-                        onChange={e => this.handleChange('password', e)}
+                        onChange={this.handleChange('password')}
                     />
                     <span className={'field__error field-error t-error-password'}>
                         {errors.password}
